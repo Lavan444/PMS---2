@@ -124,9 +124,14 @@ const customStyles = `
         height: 1.5rem;
     }`;
 
-const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes} = {}) => {
+const WorkType1 = ({
+    initialWorkTypes: propInitialWorkTypes,
+    dropdownWorkTypes: propDropdownWorkTypes,
+    onWorkTypesChange,
+    onSelectionChange
+} = {}) => {
 
-     const [workTypeModalVisible, setWorkTypeModalVisible] = useState(false);
+    const [workTypeModalVisible, setWorkTypeModalVisible] = useState(false);
     const [iconPickerVisible, setIconPickerVisible] = useState(false);
     const toast = useRef(null);
 
@@ -168,63 +173,63 @@ const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes} = {}) => {
 
 
 
-//     const [workTypeModalVisible, setWorkTypeModalVisible] = useState(false);
-//     const [iconPickerVisible, setIconPickerVisible] = useState(false);
-//     const toast = useRef(null);
+    //     const [workTypeModalVisible, setWorkTypeModalVisible] = useState(false);
+    //     const [iconPickerVisible, setIconPickerVisible] = useState(false);
+    //     const toast = useRef(null);
 
-//     const customWorkTypes = [
-//   {
-//     name: 'Custom Task',
-//     color: '#00ff00',
-//     id: 'custom_task',
-//     statuses: ['Pending', 'Active', 'Completed']
-//   },
-//   {
-//     name: 'Custom Bug',
-//     color: '#ff0000',
-//     id: 'custom_bug',
-//     statuses: ['Reported', 'In Progress', 'Fixed']
-//   }
-// ];
+    //     const customWorkTypes = [
+    //   {
+    //     name: 'Custom Task',
+    //     color: '#00ff00',
+    //     id: 'custom_task',
+    //     statuses: ['Pending', 'Active', 'Completed']
+    //   },
+    //   {
+    //     name: 'Custom Bug',
+    //     color: '#ff0000',
+    //     id: 'custom_bug',
+    //     statuses: ['Reported', 'In Progress', 'Fixed']
+    //   }
+    // ];
 
-//     const initialWorkTypes = [
-//         {
-//             name: 'AI Generator',
-//             // icon: 'pi pi-check-square',
-//             color: '#4c9aff',
-//             id: 'task',
-//             statuses: [
-//                 'To Do', 'In Progress', 'In Review', 'Ready for QA', 'QA in Progress', 'Blocked', 'Done or Closed'
-//             ]
-//         },
-//         {
-//             name: 'Resume Parser',
-//             // icon: 'pi pi-exclamation-circle',
-//             color: '#ff5630',
-//             id: 'bug',
-//             statuses: [
-//                 'Open', 'Triaged', 'In Progress', 'Ready for QA', 'QA in Progress', 'Reopened', 'Blocked', 'Closed', 'Won\'t Fix', 'Duplicate'
-//             ]
-//         },
-//         {
-//             name: 'Chatbot Assistant',
-//             // icon: 'pi pi-book',
-//             color: '#36b37e',
-//             id: 'story',
-//             statuses: ['To Do', 'In Progress', 'Done']
-//         },
-       
-//     ];
+    //     const initialWorkTypes = [
+    //         {
+    //             name: 'AI Generator',
+    //             // icon: 'pi pi-check-square',
+    //             color: '#4c9aff',
+    //             id: 'task',
+    //             statuses: [
+    //                 'To Do', 'In Progress', 'In Review', 'Ready for QA', 'QA in Progress', 'Blocked', 'Done or Closed'
+    //             ]
+    //         },
+    //         {
+    //             name: 'Resume Parser',
+    //             // icon: 'pi pi-exclamation-circle',
+    //             color: '#ff5630',
+    //             id: 'bug',
+    //             statuses: [
+    //                 'Open', 'Triaged', 'In Progress', 'Ready for QA', 'QA in Progress', 'Reopened', 'Blocked', 'Closed', 'Won\'t Fix', 'Duplicate'
+    //             ]
+    //         },
+    //         {
+    //             name: 'Chatbot Assistant',
+    //             // icon: 'pi pi-book',
+    //             color: '#36b37e',
+    //             id: 'story',
+    //             statuses: ['To Do', 'In Progress', 'Done']
+    //         },
 
-//     const [workTypes, setWorkTypes] = useState(initialWorkTypes);
+    //     ];
 
-//     const [formData, setFormData] = useState(() => {
-//         const defaultWorkType = initialWorkTypes.find(wt => wt.id === 'task') || workTypes[0];
-//         return {
-//             workType: defaultWorkType,
-//             status: defaultWorkType ? defaultWorkType.statuses[0] : null
-//         };
-//     });
+    //     const [workTypes, setWorkTypes] = useState(initialWorkTypes);
+
+    //     const [formData, setFormData] = useState(() => {
+    //         const defaultWorkType = initialWorkTypes.find(wt => wt.id === 'task') || workTypes[0];
+    //         return {
+    //             workType: defaultWorkType,
+    //             status: defaultWorkType ? defaultWorkType.statuses[0] : null
+    //         };
+    //     });
 
     const [workTypeForm, setWorkTypeForm] = useState({
         name: '',
@@ -390,60 +395,6 @@ const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes} = {}) => {
         );
     };
 
-    const handleInputChange = (field, value) => {
-        if (field === 'workType') {
-            if (value && value.id === 'create-new-work-type') {
-                openCreateWorkType();
-                setFormData(prev => ({ ...prev, workType: prev.workType || (workTypes.find(wt => wt.id === 'task') || workTypes[0]) }));
-                return;
-            }
-            if (value && value.id === 'edit-selected-work-type') {
-                if (formData.workType && formData.workType.id && workTypes.find(wt => wt.id === formData.workType.id)) {
-                    openEditWorkType(formData.workType);
-                } else {
-                    toast.current.show({
-                        severity: 'warn',
-                        summary: 'No Work Type Selected',
-                        detail: 'Please select a valid work type to edit.'
-                    });
-                }
-                // Keep the current selection instead of changing it
-                return;
-            }
-            setFormData(prev => ({
-                ...prev,
-                workType: value,
-                status: value.statuses && value.statuses.length > 0 ? value.statuses[0] : null
-            }));
-            return;
-        }
-        setFormData(prev => ({ ...prev, [field]: value }));
-    };
-
-    const openCreateWorkType = () => {
-        setEditingWorkType(null);
-        setWorkTypeForm({ name: '', icon: '', color: '#4c9aff', description: '', statuses: ['To Do', 'In Progress', 'Done'] });
-        setWorkTypeModalVisible(true);
-    };
-
-    const openEditWorkType = (workType) => {
-        const workTypeToEdit = workTypes.find(wt => wt.id === workType.id);
-        if (workTypeToEdit) {
-            setEditingWorkType(workTypeToEdit);
-            setWorkTypeForm({ ...workTypeToEdit });
-        } else {
-            console.warn("Work type not found in workTypes array:", workType);
-            setEditingWorkType(workType);
-            setWorkTypeForm({ ...workType });
-        }
-        setWorkTypeModalVisible(true);
-    };
-
-    const handleEditWorkTypeDropdownChange = (selectedWorkType) => {
-        setEditingWorkType(selectedWorkType);
-        setWorkTypeForm({ ...selectedWorkType });
-    };
-
     const saveWorkType = () => {
         if (!workTypeForm.name.trim()) {
             toast.current.show({
@@ -454,22 +405,31 @@ const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes} = {}) => {
             return;
         }
 
+        let updatedWorkTypes;
+
         if (editingWorkType) {
-            setWorkTypes(prev => prev.map(wt =>
+            updatedWorkTypes = workTypes.map(wt =>
                 wt.id === editingWorkType.id
                     ? { ...workTypeForm, id: editingWorkType.id }
                     : wt
-            ));
+            );
+            setWorkTypes(updatedWorkTypes);
             toast.current.show({
                 severity: 'success',
                 summary: 'Success',
                 detail: 'Work type updated successfully!'
             });
 
+            const updatedWorkType = { ...workTypeForm, id: editingWorkType.id };
             setFormData(prev => ({
                 ...prev,
-                workType: { ...workTypeForm, id: editingWorkType.id }
+                workType: updatedWorkType
             }));
+
+            // Notify parent of selection change
+            if (onSelectionChange) {
+                onSelectionChange(updatedWorkType);
+            }
         } else {
             const newWorkType = {
                 ...workTypeForm,
@@ -477,13 +437,33 @@ const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes} = {}) => {
                 icon: workTypeForm.icon.startsWith('pi pi-') || workTypeForm.icon.startsWith('data:image/') ? workTypeForm.icon : workTypeForm.icon.toUpperCase(),
                 statuses: workTypeForm.statuses || ['New Status']
             };
-            setWorkTypes(prev => [...prev, newWorkType]);
+            updatedWorkTypes = [...workTypes, newWorkType];
+            setWorkTypes(updatedWorkTypes);
+
+            // Set the new work type as selected
+            setFormData(prev => ({
+                ...prev,
+                workType: newWorkType,
+                status: newWorkType.statuses[0]
+            }));
+
+            // Notify parent of selection change
+            if (onSelectionChange) {
+                onSelectionChange(newWorkType);
+            }
+
             toast.current.show({
                 severity: 'success',
                 summary: 'Success',
                 detail: 'Work type created successfully!'
             });
         }
+
+        // Notify parent of work types change
+        if (onWorkTypesChange) {
+            onWorkTypesChange(updatedWorkTypes);
+        }
+
         setWorkTypeModalVisible(false);
     };
 
@@ -501,15 +481,29 @@ const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes} = {}) => {
                     });
                     return;
                 }
-                setWorkTypes(prev => prev.filter(wt => wt.id !== workType.id));
+
+                const updatedWorkTypes = workTypes.filter(wt => wt.id !== workType.id);
+                setWorkTypes(updatedWorkTypes);
+
                 if (formData.workType.id === workType.id) {
-                    const newDefaultWorkType = workTypes.filter(wt => wt.id !== workType.id)[0];
+                    const newDefaultWorkType = updatedWorkTypes[0];
                     setFormData(prev => ({
                         ...prev,
                         workType: newDefaultWorkType,
                         status: newDefaultWorkType ? newDefaultWorkType.statuses[0] : null
                     }));
+
+                    // Notify parent of selection change
+                    if (onSelectionChange) {
+                        onSelectionChange(newDefaultWorkType);
+                    }
                 }
+
+                // Notify parent of work types change
+                if (onWorkTypesChange) {
+                    onWorkTypesChange(updatedWorkTypes);
+                }
+
                 toast.current.show({
                     severity: 'success',
                     summary: 'Success',
@@ -547,9 +541,68 @@ const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes} = {}) => {
         setIconPickerVisible(false);
     };
 
-    const dropdownWorkTypes = [
+    const handleInputChange = (field, value) => {
+        if (field === 'workType') {
+            if (value && value.id === 'create-new-work-type') {
+                openCreateWorkType();
+                setFormData(prev => ({ ...prev, workType: prev.workType || (workTypes.find(wt => wt.id === 'task') || workTypes[0]) }));
+                return;
+            }
+            if (value && value.id === 'edit-selected-work-type') {
+                if (formData.workType && formData.workType.id && workTypes.find(wt => wt.id === formData.workType.id)) {
+                    openEditWorkType(formData.workType);
+                } else {
+                    toast.current.show({
+                        severity: 'warn',
+                        summary: 'No Work Type Selected',
+                        detail: 'Please select a valid work type to edit.'
+                    });
+                }
+                return;
+            }
+            setFormData(prev => ({
+                ...prev,
+                workType: value,
+                status: value.statuses && value.statuses.length > 0 ? value.statuses[0] : null
+            }));
+
+            // Notify parent of selection change
+            if (onSelectionChange) {
+                onSelectionChange(value);
+            }
+            return;
+        }
+        setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    const openCreateWorkType = () => {
+        setEditingWorkType(null);
+        setWorkTypeForm({ name: '', icon: '', color: '#4c9aff', description: '', statuses: ['To Do', 'In Progress', 'Done'] });
+        setWorkTypeModalVisible(true);
+    };
+
+    const openEditWorkType = (workType) => {
+        const workTypeToEdit = workTypes.find(wt => wt.id === workType.id);
+        if (workTypeToEdit) {
+            setEditingWorkType(workTypeToEdit);
+            setWorkTypeForm({ ...workTypeToEdit });
+        } else {
+            console.warn("Work type not found in workTypes array:", workType);
+            setEditingWorkType(workType);
+            setWorkTypeForm({ ...workType });
+        }
+        setWorkTypeModalVisible(true);
+    };
+
+    const handleEditWorkTypeDropdownChange = (selectedWorkType) => {
+        setEditingWorkType(selectedWorkType);
+        setWorkTypeForm({ ...selectedWorkType });
+    };
+
+    // Use prop dropdownWorkTypes if provided, otherwise use the default behavior
+    const dropdownWorkTypes = propDropdownWorkTypes || [
         ...workTypes,
-        { id: 'divider', disabled: true }, 
+        { id: 'divider', disabled: true },
         { name: 'Add Work Type', id: 'create-new-work-type' },
         { name: 'Edit Work Type', id: 'edit-selected-work-type' }
     ];

@@ -142,111 +142,17 @@ const CandidateEditForm = () => {
         );
     };
 
-    // WorkType configurations
-    const customWorkTypes = [
+    // WorkType configurations with state management
+    const [moduleWorkTypes, setModuleWorkTypes] = useState([
         {
             name: 'User Management',
             color: '#000000',
             id: 'custom-task',
             statuses: ['Pending', 'Processing', 'Completed']
         }
-    ];
+    ]);
 
-    const customWorkTypes1 = [
-        {
-            name: 'Rohit Kumar - Developer',
-            color: '#000000',
-            id: 'custom-task',
-            statuses: ['Pending', 'Processing', 'Completed']
-        }
-    ];
-
-    const customWorkTypes2 = [
-        {
-            name: 'Hold',
-            color: '#000000',
-            id: 'custom-task',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-        {
-            name: 'In Review',
-            color: '#000000',
-            id: 'in-review',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-        {
-            name: 'Done Closed',
-            color: '#000000',
-            id: 'done-closed',
-            statuses: ['Pending', 'Processing', 'Completed']
-        }
-    ];
-
-    const customWorkTypes3 = [
-        {
-            name: 'Hold',
-            color: '#000000',
-            id: 'custom-task',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-        {
-            name: 'In Review',
-            color: '#000000',
-            id: 'in-review',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-        {
-            name: 'Done Closed',
-            color: '#000000',
-            id: 'done-closed',
-            statuses: ['Pending', 'Processing', 'Completed']
-        }
-    ];
-
-    const customWorkTypes4 = [
-        {
-            name: 'Low',
-            color: '#000000',
-            id: 'custom-task',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-        {
-            name: 'Medium',
-            color: '#000000',
-            id: 'in-review',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-        {
-            name: 'High',
-            color: '#000000',
-            id: 'done-closed',
-            statuses: ['Pending', 'Processing', 'Completed']
-        }
-    ];
-
-    const customWorkTypes5 = [
-        {
-            name: 'Active',
-            color: '#000000',
-            id: 'custom-task',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-        {
-            name: 'In Active',
-            color: '#000000',
-            id: 'in-active',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-        {
-            name: 'On Hold',
-            color: '#000000',
-            id: 'dnd',
-            statuses: ['Pending', 'Processing', 'Completed']
-        },
-    ];
-
-    // WorkType for Company selection
-    const customWorkTypesCompany = [
+    const [companyWorkTypes, setCompanyWorkTypes] = useState([
         {
             name: 'Vitel Global Solutions',
             color: '#000000',
@@ -271,25 +177,71 @@ const CandidateEditForm = () => {
             id: 'enterprise-systems',
             statuses: ['Pending', 'Processing', 'Completed']
         }
-    ];
+    ]);
 
-    // Custom dropdown configurations for each WorkType1
+    const [statusWorkTypes, setStatusWorkTypes] = useState([
+        {
+            name: 'Active',
+            color: '#000000',
+            id: 'custom-task',
+            statuses: ['Pending', 'Processing', 'Completed']
+        },
+        {
+            name: 'In Active',
+            color: '#000000',
+            id: 'in-active',
+            statuses: ['Pending', 'Processing', 'Completed']
+        },
+        {
+            name: 'On Hold',
+            color: '#000000',
+            id: 'dnd',
+            statuses: ['Pending', 'Processing', 'Completed']
+        },
+    ]);
+
+    // Callback handlers for work type changes
+    const handleModuleWorkTypesChange = (updatedWorkTypes) => {
+        setModuleWorkTypes(updatedWorkTypes);
+    };
+
+    const handleCompanyWorkTypesChange = (updatedWorkTypes) => {
+        setCompanyWorkTypes(updatedWorkTypes);
+    };
+
+    const handleStatusWorkTypesChange = (updatedWorkTypes) => {
+        setStatusWorkTypes(updatedWorkTypes);
+    };
+
+    const handleModuleSelectionChange = (selectedWorkType) => {
+        setSelectedModule(selectedWorkType);
+    };
+
+    const handleCompanySelectionChange = (selectedWorkType) => {
+        setSelectedCompany(selectedWorkType);
+    };
+
+    const handleStatusSelectionChange = (selectedWorkType) => {
+        setSelectedProjectStatus(selectedWorkType);
+    };
+
+    // Dynamic dropdown configurations
     const moduleDropdownWorkTypes = [
-        ...customWorkTypes,
+        ...moduleWorkTypes,
         { id: 'divider', disabled: true },
         { name: 'Add Module', id: 'create-new-work-type' },
         { name: 'Edit Module', id: 'edit-selected-work-type' }
     ];
 
     const companyDropdownWorkTypes = [
-        ...customWorkTypesCompany,
+        ...companyWorkTypes,
         { id: 'divider', disabled: true },
         { name: 'Add Company', id: 'create-new-work-type' },
         { name: 'Edit Company', id: 'edit-selected-work-type' }
     ];
 
     const statusDropdownWorkTypes = [
-        ...customWorkTypes5,
+        ...statusWorkTypes,
         { id: 'divider', disabled: true },
         { name: 'Add Status', id: 'create-new-work-type' },
         { name: 'Edit Status', id: 'edit-selected-work-type' }
@@ -511,8 +463,10 @@ As the assigned team member, you will be responsible for managing your specific 
                                                     </Col>
                                                     <Col xl={9}>
                                                         <WorkType1
-                                                            initialWorkTypes={customWorkTypes}
+                                                            initialWorkTypes={moduleWorkTypes}
                                                             dropdownWorkTypes={moduleDropdownWorkTypes}
+                                                            onWorkTypesChange={handleModuleWorkTypesChange}
+                                                            onSelectionChange={handleModuleSelectionChange}
                                                         />
                                                     </Col>
                                                 </Row>
@@ -523,8 +477,10 @@ As the assigned team member, you will be responsible for managing your specific 
                                                     </Col>
                                                     <Col xl={9}>
                                                         <WorkType1
-                                                            initialWorkTypes={customWorkTypesCompany}
+                                                            initialWorkTypes={companyWorkTypes}
                                                             dropdownWorkTypes={companyDropdownWorkTypes}
+                                                            onWorkTypesChange={handleCompanyWorkTypesChange}
+                                                            onSelectionChange={handleCompanySelectionChange}
                                                         />
                                                     </Col>
                                                 </Row>
@@ -550,8 +506,10 @@ As the assigned team member, you will be responsible for managing your specific 
                                                     </Col>
                                                     <Col xl={9}>
                                                         <WorkType1
-                                                            initialWorkTypes={customWorkTypes5}
+                                                            initialWorkTypes={statusWorkTypes}
                                                             dropdownWorkTypes={statusDropdownWorkTypes}
+                                                            onWorkTypesChange={handleStatusWorkTypesChange}
+                                                            onSelectionChange={handleStatusSelectionChange}
                                                         />
                                                     </Col>
                                                 </Row>
