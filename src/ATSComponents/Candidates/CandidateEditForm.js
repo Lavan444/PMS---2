@@ -857,118 +857,11 @@ As the assigned team member, you will be responsible for managing your specific 
                                 </CardBody>
                             </Card>
 
-                            <Card className="bg-form">
-                                <CardBody>
-                                    <h4 className="card-title mb-2">Approval & Status</h4>
-                                    <Row>
-                                        <Col xl={12}>
-                                            <div className="">
-                                                <Row>
-                                                    <Col xl={12}>
-
-
-                                                        <Row className="mt-2 align-items-center">
-                                                            <Col xl={3}>
-                                                                <label htmlFor="approvalStatus">Approval Status</label>
-                                                            </Col>
-                                                            <Col xl={9}>
-                                                                <WorkType1
-                                                                    initialWorkTypes={approvalStatusWorkTypes}
-                                                                    dropdownWorkTypes={approvalStatusDropdownWorkTypes}
-                                                                    onWorkTypesChange={handleApprovalStatusWorkTypesChange}
-                                                                    onSelectionChange={handleApprovalStatusSelectionChange}
-                                                                />
-                                                            </Col>
-                                                        </Row>
-
-
-
-
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </CardBody>
-                            </Card>
-
-
-
-
                         </Col>
 
                         <Col xl={7}>
 
-                            <Card className="bg-form screening-que">
-                                <CardBody>
-                                    <h4 className="card-title mb-3">Description</h4>
-
-
-
-                                    <div class="add-que-card mb-4">
-
-
-                                        <Row>
-                                            <Col xl={12}>
-                                                <Row className="sidebar d-flex align-items-center">
-                                                    <Col xl={6}>
-                                                        <label
-                                                            htmlFor="integer"
-                                                            className=" block mb-2"
-                                                        >
-                                                            Description
-                                                        </label>
-
-                                                    </Col>
-                                                    <Col lg={6} className="d-flex justify-content-end mt-2">
-                                                        <Button color="primary" className="btn btn-primary aibtn">
-                                                            <i class="pi pi-star me-1"></i>
-                                                            Write with AI
-                                                        </Button>
-                                                    </Col>
-                                                </Row>
-                                                <Row className="mt-2 align-items-center">
-
-                                                    <Col xl={12}>
-                                                        <div className="p-field mb-0">
-                                                            <Editor value={content} onTextChange={handleEditorChange} headerTemplate={header} style={{ height: '100px' }}
-                                                                className="w-full" />
-
-                                                        </div>
-                                                        {/* <div style={{ marginTop: "10px", textAlign: "right" }}>
-                                                                    <span>
-                                                                        {currentWordCount}/{maxWords} words
-                                                                    </span>
-                                                                </div> */}
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </div>
-
-
-
-
-
-                                    <ConfirmDialog />
-                                </CardBody>
-                            </Card>
-
-                            {/* <Card className="bg-form screening-que">
-                                <CardBody>
-                                    <h4 className="card-title mb-3">Phases of Project Development</h4>
-                                </CardBody>
-                            </Card> */}
-
-                            <Row>
-                                <Col xl={6}>
-
-
-
-
-
-
-                                    <Card className="bg-form">
+                         <Card className="bg-form">
                                         <CardBody>
                                             <h4 className="card-title mb-2">Documents</h4>
                                             <Row>
@@ -1092,6 +985,112 @@ As the assigned team member, you will be responsible for managing your specific 
                                         </Dialog>
                                     </Card>
 
+                            <Card className="bg-form screening-que">
+                                <CardBody>
+                                    <h4 className="card-title mb-3">Description</h4>
+
+
+
+                                    <div class="add-que-card mb-4">
+
+
+                                        <Row>
+                                            <Col xl={12}>
+                                                <Row className="sidebar d-flex align-items-center">
+                                                    <Col xl={6}>
+                                                        <label
+                                                            htmlFor="integer"
+                                                            className=" block mb-2"
+                                                        >
+                                                            Description
+                                                        </label>
+
+                                                    </Col>
+                                                    <Col lg={6} className="d-flex justify-content-end mt-2">
+                                                        <Button color="primary" className="btn btn-primary aibtn">
+                                                            <i class="pi pi-star me-1"></i>
+                                                            Write with AI
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                                <Row className="mt-2 align-items-center">
+
+                                                    <Col xl={12}>
+                                                        <div className="p-field mb-0">
+                                                            <Editor value={content} onTextChange={handleEditorChange} headerTemplate={header} style={{ height: '100px' }}
+                                                                className="w-full" />
+
+                                                        </div>
+                                                        {/* <div style={{ marginTop: "10px", textAlign: "right" }}>
+                                                                    <span>
+                                                                        {currentWordCount}/{maxWords} words
+                                                                    </span>
+                                                                </div> */}
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                    </div>
+
+
+
+
+
+                                    <ConfirmDialog />
+                                </CardBody>
+                            </Card>
+
+                             
+
+                            {/* <Card className="bg-form screening-que">
+                                <CardBody>
+                                    <h4 className="card-title mb-3">Phases of Project Development</h4>
+                                </CardBody>
+                            </Card> */}
+
+                            <Row>
+                                <Col xl={6}>
+
+
+    <Card className="bg-form">
+                                <CardBody>
+                                    <h4 className="card-title mb-2">Approval & Status</h4>
+                                    <Row>
+                                        <Col xl={12}>
+                                            <div className="">
+                                                <Row>
+                                                    <Col xl={12}>
+
+
+                                                        <Row className="mt-2 align-items-center">
+                                                            <Col xl={3}>
+                                                                <label htmlFor="approvalStatus">Approval Status</label>
+                                                            </Col>
+                                                            <Col xl={9}>
+                                                                <WorkType1
+                                                                    initialWorkTypes={approvalStatusWorkTypes}
+                                                                    dropdownWorkTypes={approvalStatusDropdownWorkTypes}
+                                                                    onWorkTypesChange={handleApprovalStatusWorkTypesChange}
+                                                                    onSelectionChange={handleApprovalStatusSelectionChange}
+                                                                />
+                                                            </Col>
+                                                        </Row>
+
+
+
+
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </CardBody>
+                            </Card>
+
+
+
+                                  
+
                                 </Col>
                                 <Col xl={6}>
                                     <Card className="bg-form">
@@ -1165,14 +1164,14 @@ As the assigned team member, you will be responsible for managing your specific 
 
                                                                             className=" block"
                                                                         >
-                                                                            Last Activity Type
+                                                                            Edited By
                                                                         </label>
                                                                     </Col>
                                                                     <Col xl={9}>
                                                                         <InputText
                                                                             id="integer"
                                                                             className="w-full"
-                                                                            placeholder="Interview"
+                                                                            placeholder="Harish"
                                                                             disabled
                                                                         />
                                                                     </Col>

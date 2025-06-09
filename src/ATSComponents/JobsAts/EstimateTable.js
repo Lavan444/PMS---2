@@ -7,6 +7,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { Chips } from 'primereact/chips';
+import { Tooltip } from 'primereact/tooltip';
 import 'primereact/resources/themes/saga-blue/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -28,7 +29,6 @@ const EstimateTable = () => {
     //   responsible: 'Business Analyst'
     // }
   ]);
-
   const [displayDialog, setDisplayDialog] = useState(false);
   const [currentPhase, setCurrentPhase] = useState({
     phase: '',
@@ -37,6 +37,11 @@ const EstimateTable = () => {
     deliverables: [],
     responsible: ''
   });
+  const [editIndex, setEditIndex] = useState(null); // Track editing row
+
+  // Add state for error dialog
+  const [errorDialog, setErrorDialog] = useState({ visible: false, message: '' });
+  const [deleteDialog, setDeleteDialog] = useState({ visible: false, rowIndex: null });
 
   const responsibleOptions = [
     'Project Manager',
@@ -53,26 +58,49 @@ const EstimateTable = () => {
 
   const openNewPhaseDialog = () => {
     setCurrentPhase({ phase: '', startDate: null, endDate: null, deliverables: [], responsible: '' });
+    setEditIndex(null);
+    setDisplayDialog(true);
+  };
+
+  const openEditPhaseDialog = (rowData, rowIndex) => {
+    setCurrentPhase({ ...rowData });
+    setEditIndex(rowIndex);
     setDisplayDialog(true);
   };
 
   const savePhase = () => {
-    if (
-      currentPhase.phase &&
-      currentPhase.startDate &&
-      currentPhase.endDate &&
-      currentPhase.deliverables.length > 0 &&
-      currentPhase.responsible
-    ) {
-      if (currentPhase.endDate < currentPhase.startDate) {
-        alert('End date must be after start date');
-        return;
-      }
-      setPhases([...phases, currentPhase]);
-      setDisplayDialog(false);
-    } else {
-      alert('Please fill all required fields');
+    if (!currentPhase.phase) {
+      setErrorDialog({ visible: true, message: 'Phase is required' });
+      return;
     }
+    if (currentPhase.startDate && currentPhase.endDate && currentPhase.endDate < currentPhase.startDate) {
+      setErrorDialog({ visible: true, message: 'End date must be after start date' });
+      return;
+    }
+    if (editIndex !== null) {
+      // Edit mode
+      const updatedPhases = [...phases];
+      updatedPhases[editIndex] = currentPhase;
+      setPhases(updatedPhases);
+    } else {
+      // Add mode
+      setPhases([...phases, currentPhase]);
+    }
+    setDisplayDialog(false);
+  };
+
+  const confirmDeletePhase = (rowIndex) => {
+    setDeleteDialog({ visible: true, rowIndex });
+  };
+
+  const handleDeleteConfirmed = () => {
+    const updatedPhases = phases.filter((_, idx) => idx !== deleteDialog.rowIndex);
+    setPhases(updatedPhases);
+    setDeleteDialog({ visible: false, rowIndex: null });
+  };
+
+  const handleDeleteCancelled = () => {
+    setDeleteDialog({ visible: false, rowIndex: null });
   };
 
   const formatDateRange = (startDate, endDate) => {
@@ -99,12 +127,74 @@ const EstimateTable = () => {
     );
   };
 
-  const deliverablesTemplate = (rowData) => (
-    <ul className="list-disc pl-5">
-      {rowData.deliverables.map((item, i) => (
-        <li key={i}>{item}</li>
-      ))}
-    </ul>
+  const sanitizeId = (str) =>
+    String(str)
+      .replace(/[^a-zA-Z0-9_-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+
+  const deliverablesTemplate = (rowData) => {
+    const deliverables = Array.isArray(rowData.deliverables) ? rowData.deliverables : [];
+    const maxLen = 20; // max chars per bullet before ellipsis
+    return (
+      <div>
+        {deliverables.map((item, i) => {
+          const showEllipsis = item.length > maxLen;
+          const shortText = showEllipsis ? item.slice(0, maxLen) + '...' : item;
+          const tooltipId = `deliverable-tooltip-${sanitizeId(rowData.phase)}-${i}`;
+          return (
+            <div key={i} style={{ display: 'flex', alignItems: 'center' }}>
+              <span style={{
+                display: 'inline-block',
+                minWidth: 16,
+                marginRight: 8,
+                fontWeight: 'bold',
+                fontSize: '1.1em',
+                lineHeight: 1
+              }}>•</span>
+              <span
+                id={tooltipId}
+                style={{
+                  cursor: showEllipsis ? 'pointer' : 'default',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  maxWidth: 160
+                }}
+              >
+                {shortText}
+              </span>
+              {showEllipsis && (
+                <Tooltip target={`#${tooltipId}`} content={item} />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // Actions column template
+  const actionsBodyTemplate = (rowData, { rowIndex }) => (
+    <div className="flex gap-2">
+      <Button
+        icon="pi pi-pencil"
+        className="p-button-rounded p-button-text p-button-sm"
+        onClick={() => openEditPhaseDialog(rowData, rowIndex)}
+        tooltip="Edit"
+        type="button"
+      />
+      <Button
+        icon="pi pi-trash"
+        className="p-button-rounded p-button-text p-button-sm"
+        onClick={() => confirmDeletePhase(rowIndex)}
+        tooltip="Delete"
+        type="button"
+        severity="danger"
+      />
+    </div>
   );
 
   return (
@@ -170,20 +260,25 @@ const EstimateTable = () => {
           showGridlines={false}
           style={{ border: 'none', boxShadow: 'none' }}
         >
-          <Column field="phase" header="Phase" style={{ width: '25%' }}></Column>
+          <Column field="phase" header="Phase" style={{ width: '22%' }}></Column>
           <Column
             field="dateRange"
             header="Duration (Example)"
             body={dateRangeBody}
-            style={{ width: '25%' }}
+            style={{ width: '22%' }}
           ></Column>
           <Column
             field="deliverables"
             header="Key Deliverables"
             body={deliverablesTemplate}
-            style={{ width: '35%' }}
+            style={{ width: '31%' }}
           ></Column>
           <Column field="responsible" header="Responsible" style={{ width: '15%' }}></Column>
+          <Column
+            header="Actions"
+            body={actionsBodyTemplate}
+            style={{ width: '10%', textAlign: 'center' }}
+          />
         </DataTable>
       </div>
 
@@ -191,10 +286,10 @@ const EstimateTable = () => {
       <Dialog
         visible={displayDialog}
         onHide={() => setDisplayDialog(false)}
-        header="Add New Phase"
+        header={editIndex !== null ? "Edit Phase" : "Add New Phase"}
         style={{ width: '40vw', maxWidth: 600, border: 'none', boxShadow: 'none' }}
         footer={
-          <div className="flex gap-2 justify-end">
+          <div className="d-flex justify-content-end gap-2">
             <Button label="Cancel" icon="pi pi-times" onClick={() => setDisplayDialog(false)} severity="secondary" />
             <Button label="Save" icon="pi pi-check" onClick={savePhase} />
           </div>
@@ -212,7 +307,7 @@ const EstimateTable = () => {
           </div>
           <div className="formgrid grid mb-4">
             <div className="field col-6">
-              <label className="font-semibold mb-2 block">Start Date </label>
+              <label className="font-semibold mb-2 block">Start Date</label>
               <Calendar
                 value={currentPhase.startDate}
                 onChange={(e) => setCurrentPhase({ ...currentPhase, startDate: e.value })}
@@ -222,7 +317,7 @@ const EstimateTable = () => {
               />
             </div>
             <div className="field col-6">
-              <label className="font-semibold mb-2 block">End Date </label>
+              <label className="font-semibold mb-2 block">End Date</label>
               <Calendar
                 value={currentPhase.endDate}
                 onChange={(e) => setCurrentPhase({ ...currentPhase, endDate: e.value })}
@@ -234,7 +329,7 @@ const EstimateTable = () => {
             </div>
           </div>
           <div className="field mb-4">
-            <label className="font-semibold mb-2 block">Deliverables </label>
+            <label className="font-semibold mb-2 block">Deliverables</label>
             <Chips
               value={currentPhase.deliverables}
               onChange={(e) => setCurrentPhase({ ...currentPhase, deliverables: e.value })}
@@ -250,10 +345,44 @@ const EstimateTable = () => {
               options={responsibleOptions}
               onChange={(e) => setCurrentPhase({ ...currentPhase, responsible: e.value })}
               placeholder="Select Responsible"
-              className="w-full"
+              className="w-full bgclr"
             />
           </div>
         </div>
+      </Dialog>
+      {/* Error Dialog */}
+      <Dialog
+        visible={errorDialog.visible}
+        onHide={() => setErrorDialog({ visible: false, message: '' })}
+        header="Validation Error"
+        style={{ width: '350px' }}
+        footer={
+          <Button
+            label="OK"
+            icon="pi pi-check"
+            onClick={() => setErrorDialog({ visible: false, message: '' })}
+            autoFocus
+          />
+        }
+        modal
+      >
+        <div>{errorDialog.message}</div>
+      </Dialog>
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        visible={deleteDialog.visible}
+        onHide={handleDeleteCancelled}
+        header="Confirm Delete"
+        style={{ width: '350px' }}
+        footer={
+          <div className="d-flex justify-content-end gap-2">
+            <Button label="Cancel" icon="pi pi-times" onClick={handleDeleteCancelled} severity="secondary" />
+            <Button label="Delete" icon="pi pi-trash" onClick={handleDeleteConfirmed} severity="danger" />
+          </div>
+        }
+        modal
+      >
+        <div>Are you sure you want to delete this phase?</div>
       </Dialog>
     </div>
   );

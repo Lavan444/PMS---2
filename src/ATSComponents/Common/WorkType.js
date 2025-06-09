@@ -509,10 +509,10 @@ const TaskCreator = () => {
             <ConfirmDialog />
 
             <div className="formgrid grid p-fluid" style={{ maxWidth: '500px', margin: 'auto' }}>
-                <div className="field col-12 p-0">
-                    <label htmlFor="workType" className="mb-2">
+                <div className="field col-12 p-0 mb-0">
+                    {/* <label htmlFor="workType" className="mb-2">
                         Work type <span className="text-red-500">*</span>
-                    </label>
+                    </label> */}
                     <Dropdown
                         id="workType"
                         value={formData.workType}

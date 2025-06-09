@@ -421,7 +421,7 @@ As the assigned team member, you will be responsible for managing your specific 
 
                     <Row>
                         {/* Project Information */}
-                        <Col xl={4}>
+                        <Col xl={5}>
                             <Card className="bg-form">
                                 <CardBody>
                                     <h4 className="card-title mb-2">Project Information</h4>
@@ -600,128 +600,11 @@ As the assigned team member, you will be responsible for managing your specific 
                                     </Row>
                                 </CardBody>
                             </Card>
-                        </Col>
 
-                        {/* Project Description */}
-                        <Col xl={4}>
-                            <Card className="bg-form screening-que">
-                                <CardBody>
-                                    <h4 className="card-title mb-3">Project Description</h4>
-                                    <div className="add-que-card mb-4">
-                                        <Row>
-                                            <Col xl={12}>
-                                                <Row className="sidebar d-flex align-items-center">
-                                                    <Col xl={6}>
-                                                        <label htmlFor="description" className="block mb-2">
-                                                            Description
-                                                        </label>
-                                                    </Col>
-                                                    <Col lg={6} className="d-flex justify-content-end mt-2">
-                                                        <Button color="primary" className="btn btn-primary aibtn">
-                                                            <i className="pi pi-star me-1"></i>
-                                                            Write with AI
-                                                        </Button>
-                                                    </Col>
-                                                </Row>
-                                                <Row className="mt-2 align-items-center">
-                                                    <Col xl={12}>
-                                                        <div className="p-field mb-0">
-                                                            <Editor
-                                                                value={content}
-                                                                onTextChange={handleEditorChange}
-                                                                headerTemplate={header}
-                                                                style={{ height: '200px' }}
-                                                                className="w-full"
-                                                            />
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                    <ConfirmDialog />
-                                </CardBody>
-                            </Card>
+                            {/* Documents start */}
 
-                            <Card className="bg-form">
-                                <CardBody>
-                                    <h4 className="card-title mb-2">System Fields</h4>
-                                    <Row>
-                                        <Col xl={12}>
-                                            <div>
-                                                <Row className="mt-2 align-items-center">
-                                                    <Col xl={3}>
-                                                        <label htmlFor="createdBy">Created By</label>
-                                                    </Col>
-                                                    <Col xl={9}>
-                                                        <InputText
-                                                            id="createdBy"
-                                                            value={createdBy}
-                                                            readOnly
-                                                            className="w-full"
-                                                            style={{ border: '1px solid #ced4da' }}
-                                                        />
-                                                    </Col>
-                                                </Row>
 
-                                                <Row className="mt-2 align-items-center">
-                                                    <Col xl={3}>
-                                                        <label htmlFor="createdDate">Created Date</label>
-                                                    </Col>
-                                                    <Col xl={9}>
-                                                        <Calendar
-                                                            id="createdDate"
-                                                            value={createdDate}
-                                                            readOnlyInput
-                                                            dateFormat="dd/mm/yy"
-                                                            className="w-full activejobdrop"
-                                                            style={{ border: '1px solid #ced4da' }}
-                                                            showIcon
-                                                        />
-                                                    </Col>
-                                                </Row>
-
-                                                <Row className="mt-2 align-items-center">
-                                                    <Col xl={3}>
-                                                        <label htmlFor="lastModifiedBy">Last Modified By</label>
-                                                    </Col>
-                                                    <Col xl={9}>
-                                                        <InputText
-                                                            id="lastModifiedBy"
-                                                            value={lastModifiedBy}
-                                                            readOnly
-                                                            className="w-full"
-                                                            style={{ border: '1px solid #ced4da' }}
-                                                        />
-                                                    </Col>
-                                                </Row>
-
-                                                <Row className="mt-2 align-items-center">
-                                                    <Col xl={3}>
-                                                        <label htmlFor="lastModifiedDate">Last Modified Date</label>
-                                                    </Col>
-                                                    <Col xl={9}>
-                                                        <Calendar
-                                                            id="lastModifiedDate"
-                                                            value={lastModifiedDate}
-                                                            readOnlyInput
-                                                            dateFormat="dd/mm/yy"
-                                                            className="w-full activejobdrop"
-                                                            style={{ border: '1px solid #ced4da' }}
-                                                            showIcon
-                                                        />
-                                                    </Col>
-                                                </Row>
-                                            </div>
-                                        </Col>
-                                    </Row>
-                                </CardBody>
-                            </Card>
-                        </Col>
-
-                        {/* Project Documents & Notes */}
-                        <Col xl={4}>
-                            <Card className="bg-form">
+                             <Card className="bg-form">
                                 <CardBody>
                                     <h4 className="card-title mb-2">Project Documents</h4>
                                     <Row>
@@ -823,7 +706,131 @@ As the assigned team member, you will be responsible for managing your specific 
                                 </Dialog>
                             </Card>
 
-                            <Card className="bg-form">
+
+                            {/* Documents end */}
+
+                             <Card className="bg-form">
+                                <CardBody>
+                                    <h4 className="card-title mb-2">System Fields</h4>
+                                    <Row>
+                                        <Col xl={12}>
+                                            <div>
+                                                <Row className="mt-2 align-items-center">
+                                                    <Col xl={3}>
+                                                        <label htmlFor="createdBy">Created By</label>
+                                                    </Col>
+                                                    <Col xl={9}>
+                                                        <InputText
+                                                            id="createdBy"
+                                                            value={createdBy}
+                                                            readOnly
+                                                            className="w-full"
+                                                            style={{ border: '1px solid #ced4da' }}
+                                                        />
+                                                    </Col>
+                                                </Row>
+
+                                                <Row className="mt-2 align-items-center">
+                                                    <Col xl={3}>
+                                                        <label htmlFor="createdDate">Created Date</label>
+                                                    </Col>
+                                                    <Col xl={9}>
+                                                        <Calendar
+                                                            id="createdDate"
+                                                            value={createdDate}
+                                                            readOnlyInput
+                                                            dateFormat="dd/mm/yy"
+                                                            className="w-full activejobdrop"
+                                                            style={{ border: '1px solid #ced4da' }}
+                                                            showIcon
+                                                        />
+                                                    </Col>
+                                                </Row>
+
+                                                <Row className="mt-2 align-items-center">
+                                                    <Col xl={3}>
+                                                        <label htmlFor="lastModifiedBy">Last Modified By</label>
+                                                    </Col>
+                                                    <Col xl={9}>
+                                                        <InputText
+                                                            id="lastModifiedBy"
+                                                            value={lastModifiedBy}
+                                                            readOnly
+                                                            className="w-full"
+                                                            style={{ border: '1px solid #ced4da' }}
+                                                        />
+                                                    </Col>
+                                                </Row>
+
+                                                <Row className="mt-2 align-items-center">
+                                                    <Col xl={3}>
+                                                        <label htmlFor="lastModifiedDate">Last Modified Date</label>
+                                                    </Col>
+                                                    <Col xl={9}>
+                                                        <Calendar
+                                                            id="lastModifiedDate"
+                                                            value={lastModifiedDate}
+                                                            readOnlyInput
+                                                            dateFormat="dd/mm/yy"
+                                                            className="w-full activejobdrop"
+                                                            style={{ border: '1px solid #ced4da' }}
+                                                            showIcon
+                                                        />
+                                                    </Col>
+                                                </Row>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </CardBody>
+                            </Card>
+                        </Col>
+
+                        {/* Project Description */}
+                        <Col xl={7}>
+                            <Card className="bg-form screening-que">
+                                <CardBody>
+                                    <h4 className="card-title mb-3">Project Description</h4>
+                                    <div className="add-que-card mb-4">
+                                        <Row>
+                                            <Col xl={12}>
+                                                <Row className="sidebar d-flex align-items-center">
+                                                    <Col xl={6}>
+                                                        <label htmlFor="description" className="block mb-2">
+                                                            Description
+                                                        </label>
+                                                    </Col>
+                                                    <Col lg={6} className="d-flex justify-content-end mt-2">
+                                                        <Button color="primary" className="btn btn-primary aibtn">
+                                                            <i className="pi pi-star me-1"></i>
+                                                            Write with AI
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                                <Row className="mt-2 align-items-center">
+                                                    <Col xl={12}>
+                                                        <div className="p-field mb-0">
+                                                            <Editor
+                                                                value={content}
+                                                                onTextChange={handleEditorChange}
+                                                                headerTemplate={header}
+                                                                style={{ height: '200px' }}
+                                                                className="w-full"
+                                                            />
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                    <ConfirmDialog />
+                                </CardBody>
+                            </Card>
+
+
+
+                            {/* phases start */}
+
+                                <Card className="bg-form">
                                 <CardBody>
                                     <h4 className="card-title mb-2"> Phases of Project Development</h4>
                                   <EstimateTable />
@@ -908,17 +915,21 @@ As the assigned team member, you will be responsible for managing your specific 
                                 </Dialog>
                             </Card>
 
-                            <Card className="bg-form">
-                                <CardBody>
-                                    <div className="d-flex justify-content-between align-items-center mb-2">
-                                        <h4 className="card-title mb-0">
-                                            <i className="pi pi-pencil mr-2"></i>
-                                            Notes
-                                        </h4>
-                                    </div>
+                            {/* pharses end */}
 
+
+                            {/* Notes start */}
+
+
+                              <Card className="bg-form">
+                                <CardBody>
+
+
+                                   
                                     <Row>
                                         <Col lg={12}>
+
+                                          <h4 className="card-title mb-3">Notes</h4>
                                             <div className="d-flex justify-content-end">
                                                 <PrimeButton
                                                     type="button"
@@ -1062,8 +1073,12 @@ As the assigned team member, you will be responsible for managing your specific 
                             </Card>
 
 
+                            {/* Notes end */}
 
+                           
                         </Col>
+
+                      
                     </Row>
 
                     <Row className="align-items-center mb-3">
