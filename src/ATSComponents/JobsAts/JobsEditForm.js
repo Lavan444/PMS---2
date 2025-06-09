@@ -25,6 +25,7 @@ import { Link } from "react-router-dom";
 import { FileUpload } from 'primereact/fileupload';
 import WorkType1 from "../Common/WorkType1";
 import WorkType3 from "../Common/WorkType3";
+import EstimateTable from "./EstimateTable";
 
 const CandidateEditForm = () => {
     // Project Information States
@@ -824,6 +825,91 @@ As the assigned team member, you will be responsible for managing your specific 
 
                             <Card className="bg-form">
                                 <CardBody>
+                                    <h4 className="card-title mb-2"> Phases of Project Development</h4>
+                                  <EstimateTable />
+                                </CardBody>
+                                
+                                <Dialog
+                                    header="Add Document"
+                                    visible={displayDialog}
+                                    onHide={closeAddDocumentDialog}
+                                    style={{ width: "30vw" }}
+                                    footer={
+                                        <div>
+                                            <Button color="primary btn-main mr-2" onClick={handleAddDocument}>
+                                                Add Document
+                                            </Button>
+                                            <Button color="btn btn-primary cancel-outlinebtn" onClick={closeAddDocumentDialog}>
+                                                <i className="pi pi-times me-1"></i>
+                                                Cancel
+                                            </Button>
+                                        </div>
+                                    }
+                                >
+                                    <Row className="mt-2 align-items-center">
+                                        <Col xl={3}>
+                                            <label htmlFor="type" className="block mb-2">
+                                                Type
+                                            </label>
+                                        </Col>
+                                        <Col xl={9}>
+                                            <Dropdown
+                                                value={selectedDocument}
+                                                onChange={(e) => setSelectedDocument(e.value)}
+                                                options={groupedDocuments}
+                                                optionLabel="label"
+                                                optionGroupLabel="label"
+                                                optionGroupChildren="items"
+                                                optionGroupTemplate={groupedItemTemplate}
+                                                className="w-full bgclr"
+                                                style={{ border: '1px solid #ced4da' }}
+                                                placeholder="Select a Document"
+                                            />
+                                        </Col>
+                                    </Row>
+
+                                    <Row className="mt-2 align-items-center">
+                                        <Col xl={3}>
+                                            <label htmlFor="subject" className="block mb-2">
+                                                Description
+                                            </label>
+                                        </Col>
+                                        <Col xl={9}>
+                                            <InputText
+                                                id="subject"
+                                                value={subject}
+                                                onChange={(e) => setSubject(e.target.value)}
+                                                className="w-full"
+                                                style={{ border: '1px solid #ced4da' }}
+                                            />
+                                        </Col>
+                                    </Row>
+
+                                    <Row className="mt-2 align-items-center">
+                                        <Col xl={3}>
+                                            <label htmlFor="attachment" className="block mb-2">
+                                                Attachment
+                                            </label>
+                                        </Col>
+                                        <Col xl={9}>
+                                            <FileUpload
+                                                mode="basic"
+                                                name="demo[]"
+                                                url="/api/upload"
+                                                accept="*/*"
+                                                maxFileSize={1000000}
+                                                onUpload={handleUpload}
+                                                customUpload
+                                                uploadHandler={customBase64Uploader2}
+                                                className="custom-fileupload"
+                                            />
+                                        </Col>
+                                    </Row>
+                                </Dialog>
+                            </Card>
+
+                            <Card className="bg-form">
+                                <CardBody>
                                     <div className="d-flex justify-content-between align-items-center mb-2">
                                         <h4 className="card-title mb-0">
                                             <i className="pi pi-pencil mr-2"></i>
@@ -974,6 +1060,9 @@ As the assigned team member, you will be responsible for managing your specific 
                                     </Row>
                                 </CardBody>
                             </Card>
+
+
+
                         </Col>
                     </Row>
 

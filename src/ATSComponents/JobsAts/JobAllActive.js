@@ -61,6 +61,7 @@ import WorkTypeManager from "./WorkTypeManager"
 import WorkType from "ATSComponents/Common/WorkType"
 import WorkType1 from "ATSComponents/Common/WorkType1"
 import DateRangePicker from "ATSComponents/Common/DateRangePicker"
+import EstimateTable from "./EstimateTable"
 
 const JobAllActive = ({ toggleSidebar }) => {
   const [PoliciesfilesErrorMessagepan, setPoliciesfilesErrorMessagepan] =
@@ -3178,128 +3179,9 @@ const JobAllActive = ({ toggleSidebar }) => {
                <TabPanel header="Estimates" leftIcon="pi pi-sitemap mr-2">
                 <Row>
                   <Col lg={12}>
-                    <Accordion activeIndex={0}>
-                      <AccordionTab
-                        header={
-                          <span className="flex align-items-center gap-2 w-full">
-                            <span className="white-space-nowrap">
-                               Phases of IT Project Development
-                            </span>
-                            <Badge value="-" className="ml-auto" />
-                          </span>
-                        }
-                      >
-                        <Row>
-                          <Col lg={4}>
-                            <div className="field">
-                              <label htmlFor="jobId">Pharse</label>
-                              <WorkType1 initialWorkTypes={customWorkTypes1} />
-                            </div>
-                          </Col>
+                  <EstimateTable />
 
-                          <Col lg={4}>
-                            <div className="field">
-                              <label htmlFor="jobTitle">Project Name</label>
-                              {/* <InputText
-                                id="jobTitle"
-                                placeholder="Web Developer"
-                                className="w-full"
-                                value={jobtitle}
-                              /> */}
-                              <DateRangePicker />
-                            </div>
-
-                            
-                          </Col>
-
-                          <Col lg={4}>
-                            <div className="field">
-                              <label htmlFor="company">Key Deliveribles</label>
-                             <WorkType1 initialWorkTypes={customWorkTypes1} />
-                            </div>
-                          </Col>
-                        </Row>
-
-                        <Row>
-                          <Col lg={4}>
-                            <div className="field">
-                              <label htmlFor="hiringManager">
-                                Responsible
-                              </label>
-                             <WorkType1 initialWorkTypes={customWorkTypes4} />
-                            </div>
-                          </Col>
-
-                        
-                        </Row>
-
-                        <Row>
-                          <Col lg={12}>
-                            <div className="doc-table">
-                              <TreeTable
-                                value={documents}
-                                tableStyle={{ minWidth: "50rem" }}
-                              >
-                                <Column
-                                  field="certificate_name"
-                                  header="Phase"
-                                  body={rowData =>
-                                    editableTemplate(
-                                      rowData,
-                                      "certificate_name"
-                                    )
-                                  }
-                                />
-                                 <Column
-                                  field="created_at"
-                                  header="Duration "
-                                  
-                                />
-                                {/* <Column
-                                  field="docSubject"
-                                  header="Key Deliverables"
-                                  body={rowData =>
-                                    editableTemplate(rowData, "docSubject")
-                                  }
-                                /> */}
-
-                                <Column
-                                  field="docSubject"
-                                  header="Key Deliverables"
-                                  body={keyDeliverablesTemplate} // Add this body template
-                                />
-
-                                 <Column
-                                  field="responsible"
-                                  header="Responsible"
-                                  body={rowData =>
-                                    editableTemplate(rowData, "responsible")
-                                  }
-                                />
-                               
-                                {/* <Column
-                                  body={actionTemplate}
-                                  header="Responsible"
-                                /> */}
-                              </TreeTable>
-                            </div>
-                          </Col>
-                        </Row>
-
-
-
-                      </AccordionTab>
-                      <AccordionTab
-                        header={
-                          <span className="flex align-items-center gap-2 w-full">
-                            <span className="white-space-nowrap">
-                              DOCUMENTS
-                            </span>
-                            <Badge value="-" className="ml-auto" />
-                          </span>
-                        }
-                      >
-                        <Row>
+                    <Row className="mt-5">
                           <Col lg={12}>
                             <div className="doc-table">
                               <TreeTable
@@ -3335,7 +3217,7 @@ const JobAllActive = ({ toggleSidebar }) => {
                             </div>
                           </Col>
                         </Row>
-                      </AccordionTab>
+                    <Accordion activeIndex={0}>
                     </Accordion>
                   </Col>
                 </Row>
