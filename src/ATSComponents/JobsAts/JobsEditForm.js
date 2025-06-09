@@ -1,5 +1,4 @@
-import PropTypes from "prop-types"
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef } from "react";
 import {
     Container,
     Row,
@@ -8,15 +7,9 @@ import {
     Card,
     CardBody,
     Input,
-    DropdownToggle,
-    DropdownItem,
-    DropdownMenu,
-} from "reactstrap"
-import WorkType1 from "../Common/WorkType1"
-import WorkType3 from "../Common/WorkType3"
-
-import { InputText } from "primereact/inputtext"
-import { Dropdown } from "primereact/dropdown"
+} from "reactstrap";
+import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 import { Calendar } from 'primereact/calendar';
 import { Dialog } from 'primereact/dialog';
 import { DataTable } from "primereact/datatable";
@@ -26,13 +19,14 @@ import { InputNumber } from "primereact/inputnumber";
 import { TreeSelect } from "primereact/treeselect";
 import { Checkbox } from "primereact/checkbox";
 import { Editor } from "primereact/editor";
-import Select from 'react-select';
 import { Toast } from 'primereact/toast';
+import { Button as PrimeButton } from "primereact/button";
 import { Link } from "react-router-dom";
 import { FileUpload } from 'primereact/fileupload';
-//i18n
+import WorkType1 from "../Common/WorkType1";
+import WorkType3 from "../Common/WorkType3";
 
-const CandidateEditForm = props => {
+const CandidateEditForm = () => {
     // Project Information States
     const [projectCode, setProjectCode] = useState("PROJ-2024-001");
     const [projectName, setProjectName] = useState("E-Commerce Platform Development");
@@ -55,6 +49,16 @@ const CandidateEditForm = props => {
 
     // Notes State
     const [notes, setNotes] = useState("");
+    const [isEditorVisible, setIsEditorVisible] = useState(false);
+    const [editorContent, setEditorContent] = useState("");
+    const [projectNotes, setProjectNotes] = useState([
+        {
+            candidateName: "Current User",
+            timestamp: new Date().toLocaleString(),
+            content: "<strong>Initial Project Note:</strong><br>Project has been created and is ready for development phase."
+        }
+    ]);
+    const [editingNoteIndex, setEditingNoteIndex] = useState(null);
 
     // Document states
     const [displayDialog, setDisplayDialog] = useState(false);
@@ -269,6 +273,28 @@ const CandidateEditForm = props => {
         }
     ];
 
+    // Custom dropdown configurations for each WorkType1
+    const moduleDropdownWorkTypes = [
+        ...customWorkTypes,
+        { id: 'divider', disabled: true },
+        { name: 'Add Module', id: 'create-new-work-type' },
+        { name: 'Edit Module', id: 'edit-selected-work-type' }
+    ];
+
+    const companyDropdownWorkTypes = [
+        ...customWorkTypesCompany,
+        { id: 'divider', disabled: true },
+        { name: 'Add Company', id: 'create-new-work-type' },
+        { name: 'Edit Company', id: 'edit-selected-work-type' }
+    ];
+
+    const statusDropdownWorkTypes = [
+        ...customWorkTypes5,
+        { id: 'divider', disabled: true },
+        { name: 'Add Status', id: 'create-new-work-type' },
+        { name: 'Edit Status', id: 'edit-selected-work-type' }
+    ];
+
     // Dropdown options
     const moduleOptions = [
         { label: 'User Management Module', value: 'user-mgmt' },
@@ -333,6 +359,74 @@ As the assigned team member, you will be responsible for managing your specific 
 
     const showCancel = () => {
         toast.current.show({ severity: 'error', summary: 'Cancelled', life: 3000 });
+    };
+
+    const handleAddNotes = () => {
+        setIsEditorVisible(true);
+        setEditorContent("");
+        setEditingNoteIndex(null);
+    };
+
+    const handleSaveNotes = () => {
+        if (editorContent.trim()) {
+            const newNote = {
+                candidateName: "Current User",
+                timestamp: new Date().toLocaleString(),
+                content: editorContent
+            };
+
+            if (editingNoteIndex !== null) {
+                // Update existing note
+                const updatedNotes = [...projectNotes];
+                updatedNotes[editingNoteIndex] = newNote;
+                setProjectNotes(updatedNotes);
+                setEditingNoteIndex(null);
+                toast.current.show({
+                    severity: 'success',
+                    summary: 'Note Updated',
+                    detail: 'Note has been updated successfully!'
+                });
+            } else {
+                // Add new note
+                setProjectNotes([...projectNotes, newNote]);
+                toast.current.show({
+                    severity: 'success',
+                    summary: 'Note Added',
+                    detail: 'Note has been added successfully!'
+                });
+            }
+
+            setIsEditorVisible(false);
+            setEditorContent("");
+        } else {
+            toast.current.show({
+                severity: 'warn',
+                summary: 'Warning',
+                detail: 'Please enter some content for the note.'
+            });
+        }
+    };
+
+    const handleCancelNotes = () => {
+        setIsEditorVisible(false);
+        setEditorContent("");
+        setEditingNoteIndex(null);
+    };
+
+    const handleEditNote = (index) => {
+        setEditingNoteIndex(index);
+        setEditorContent(projectNotes[index].content);
+        setIsEditorVisible(true);
+    };
+
+    const handleDeleteNote = (index) => {
+        const updatedNotes = projectNotes.filter((_, i) => i !== index);
+        setProjectNotes(updatedNotes);
+        toast.current.show({
+            severity: 'success',
+            summary: 'Note Deleted',
+            detail: 'Note has been deleted successfully!'
+        });
     };
 
     return (
@@ -416,7 +510,10 @@ As the assigned team member, you will be responsible for managing your specific 
                                                         <label htmlFor="module">Module</label>
                                                     </Col>
                                                     <Col xl={9}>
-                                                        <WorkType1 initialWorkTypes={customWorkTypes} />
+                                                        <WorkType1
+                                                            initialWorkTypes={customWorkTypes}
+                                                            dropdownWorkTypes={moduleDropdownWorkTypes}
+                                                        />
                                                     </Col>
                                                 </Row>
 
@@ -425,7 +522,10 @@ As the assigned team member, you will be responsible for managing your specific 
                                                         <label htmlFor="company">Company</label>
                                                     </Col>
                                                     <Col xl={9}>
-                                                        <WorkType1 initialWorkTypes={customWorkTypesCompany} />
+                                                        <WorkType1
+                                                            initialWorkTypes={customWorkTypesCompany}
+                                                            dropdownWorkTypes={companyDropdownWorkTypes}
+                                                        />
                                                     </Col>
                                                 </Row>
 
@@ -449,7 +549,10 @@ As the assigned team member, you will be responsible for managing your specific 
                                                         <label htmlFor="projectStatus">Project Status</label>
                                                     </Col>
                                                     <Col xl={9}>
-                                                        <WorkType1 initialWorkTypes={customWorkTypes5} />
+                                                        <WorkType1
+                                                            initialWorkTypes={customWorkTypes5}
+                                                            dropdownWorkTypes={statusDropdownWorkTypes}
+                                                        />
                                                     </Col>
                                                 </Row>
                                             </div>
@@ -755,7 +858,6 @@ As the assigned team member, you will be responsible for managing your specific 
                                                 customUpload
                                                 uploadHandler={customBase64Uploader2}
                                                 className="custom-fileupload"
-                                            // style={{ border: '1px solid #ced4da' }}
                                             />
                                         </Col>
                                     </Row>
@@ -765,29 +867,151 @@ As the assigned team member, you will be responsible for managing your specific 
                             <Card className="bg-form">
                                 <CardBody>
                                     <div className="d-flex justify-content-between align-items-center mb-2">
-                                        <h4 className="card-title mb-0">Notes</h4>
+                                        <h4 className="card-title mb-0">
+                                            <i className="pi pi-pencil mr-2"></i>
+                                            Notes
+                                        </h4>
                                     </div>
+
                                     <Row>
-                                        <Col xl={12}>
-                                            <div>
-                                                <Row className="mt-2 align-items-center">
-                                                    <Col xl={12}>
-                                                        <textarea
-                                                            id="notes"
-                                                            value={notes}
-                                                            onChange={(e) => setNotes(e.target.value)}
-                                                            className="form-control w-full"
-                                                            style={{
-                                                                border: '1px solid #ced4da',
-                                                                resize: 'vertical',
-                                                                minHeight: "120px"
-                                                            }}
-                                                            rows={6}
-                                                            placeholder="Add any additional notes here..."
-                                                        />
-                                                    </Col>
-                                                </Row>
+                                        <Col lg={12}>
+                                            <div className="d-flex justify-content-end">
+                                                <PrimeButton
+                                                    type="button"
+                                                    label="Add Notes"
+                                                    icon="pi pi-plus"
+                                                    className="p-button p-button-primary"
+                                                    onClick={handleAddNotes}
+                                                    style={{
+                                                        backgroundColor: '#007bff',
+                                                        border: '1px solid #007bff',
+                                                        color: 'white',
+                                                        padding: '0.5rem 1rem',
+                                                        borderRadius: '0.25rem'
+                                                    }}
+                                                />
                                             </div>
+                                        </Col>
+                                    </Row>
+
+                                    {isEditorVisible && (
+                                        <Row className="mt-4">
+                                            <Col lg={12}>
+                                                <Editor
+                                                    value={editorContent}
+                                                    onTextChange={e => setEditorContent(e.htmlValue)}
+                                                    style={{ height: "200px" }}
+                                                    placeholder="Enter your notes here..."
+                                                    headerTemplate={header}
+                                                />
+                                                <div className="d-flex justify-content-end mt-2">
+                                                    <PrimeButton
+                                                        type="button"
+                                                        label="Save"
+                                                        icon="pi pi-save"
+                                                        className="p-button p-button-success me-2"
+                                                        onClick={handleSaveNotes}
+                                                        style={{
+                                                            backgroundColor: '#28a745',
+                                                            border: '1px solid #28a745',
+                                                            color: 'white',
+                                                            padding: '0.5rem 1rem',
+                                                            borderRadius: '0.25rem',
+                                                            marginRight: '0.5rem'
+                                                        }}
+                                                    />
+                                                    <PrimeButton
+                                                        type="button"
+                                                        label="Cancel"
+                                                        icon="pi pi-times"
+                                                        className="p-button p-button-secondary"
+                                                        onClick={handleCancelNotes}
+                                                        style={{
+                                                            backgroundColor: '#6c757d',
+                                                            border: '1px solid #6c757d',
+                                                            color: 'white',
+                                                            padding: '0.5rem 1rem',
+                                                            borderRadius: '0.25rem'
+                                                        }}
+                                                    />
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    )}
+
+                                    <Row className="mt-4 notes">
+                                        <Col lg={12}>
+                                            {projectNotes.length > 0 && (
+                                                <Card className="pt-0 pb-0">
+                                                    {projectNotes.map((note, index) => (
+                                                        <div key={index}>
+                                                            <div className="d-flex mt-0">
+                                                                <strong className="text-muted me-4">
+                                                                    {note.candidateName}
+                                                                </strong>
+                                                                <strong className="text-muted">
+                                                                    {note.timestamp}
+                                                                </strong>
+                                                            </div>
+                                                            <div className="d-flex justify-content-between mt-2 mb-0">
+                                                                <div
+                                                                    style={{
+                                                                        flex: 1,
+                                                                        wordWrap: 'break-word',
+                                                                        wordBreak: 'break-all',
+                                                                        overflowWrap: 'break-word',
+                                                                        maxWidth: 'calc(100% - 60px)',
+                                                                        marginRight: '10px'
+                                                                    }}
+                                                                    dangerouslySetInnerHTML={{
+                                                                        __html: note.content,
+                                                                    }}
+                                                                />
+                                                                <div className="d-flex align-items-center" style={{ flexShrink: 0 }}>
+                                                                    <PrimeButton
+                                                                        icon="pi pi-pencil"
+                                                                        className="p-button p-button-warning p-button-sm"
+                                                                        onClick={() => handleEditNote(index)}
+                                                                        tooltip="Edit Note"
+                                                                        tooltipOptions={{ position: 'top' }}
+                                                                        style={{
+                                                                            backgroundColor: '#ffc107',
+                                                                            border: '1px solid #ffc107',
+                                                                            color: '#212529',
+                                                                            padding: '0.15rem 0.3rem',
+                                                                            borderRadius: '0.2rem',
+                                                                            marginRight: '0.3rem',
+                                                                            fontSize: '0.75rem',
+                                                                            minWidth: 'auto',
+                                                                            height: '24px',
+                                                                            width: '24px'
+                                                                        }}
+                                                                    />
+                                                                    <PrimeButton
+                                                                        icon="pi pi-trash"
+                                                                        className="p-button p-button-danger p-button-sm"
+                                                                        onClick={() => handleDeleteNote(index)}
+                                                                        tooltip="Delete Note"
+                                                                        tooltipOptions={{ position: 'top' }}
+                                                                        style={{
+                                                                            backgroundColor: '#dc3545',
+                                                                            border: '1px solid #dc3545',
+                                                                            color: 'white',
+                                                                            padding: '0.15rem 0.3rem',
+                                                                            borderRadius: '0.2rem',
+                                                                            fontSize: '0.75rem',
+                                                                            minWidth: 'auto',
+                                                                            height: '24px',
+                                                                            width: '24px'
+                                                                        }}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            {index < projectNotes.length - 1 && <hr />}
+                                                        </div>
+                                                    ))}
+                                                </Card>
+                                            )}
                                         </Col>
                                     </Row>
                                 </CardBody>
@@ -819,7 +1043,7 @@ As the assigned team member, you will be responsible for managing your specific 
                 </Container>
             </div>
         </React.Fragment>
-    )
-}
+    );
+};
 
 export default CandidateEditForm;

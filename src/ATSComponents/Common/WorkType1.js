@@ -124,7 +124,7 @@ const customStyles = `
         height: 1.5rem;
     }`;
 
-const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes } = {}) => {
+const WorkType1 = ({ initialWorkTypes: propInitialWorkTypes} = {}) => {
 
      const [workTypeModalVisible, setWorkTypeModalVisible] = useState(false);
     const [iconPickerVisible, setIconPickerVisible] = useState(false);
